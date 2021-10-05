@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <windows.h>
 
 using namespace std;
@@ -12,6 +13,29 @@ public:
 	int itemID = 0; //make const?
 	double itemPrice = 0;
 	string itemName;
+
+	friend ostream& operator<<(ostream& output, const Drinks& menu) {
+		return output << menu.itemName << endl << "$" << menu.itemPrice << endl; //use Price()?
+	}
+
+	void DrinksMenu() {
+		Drinks Tea;
+		Tea.itemID = 1;
+		Tea.itemPrice = 5.99;
+		Tea.itemName = "English Tea";
+
+		Drinks Coffee;
+		Coffee.itemID = 2;
+		Coffee.itemPrice = 2.99;
+		Coffee.itemName = "Regular Coffee";
+
+		Drinks HotChoc;
+		HotChoc.itemID = 3;
+		HotChoc.itemPrice = 3.99;
+		HotChoc.itemName = "Hot Chocolate";
+
+		cout << endl << Tea << endl << Coffee << endl << HotChoc << endl; //loop automate
+	}
 };
 
 class Broadcast {
@@ -65,7 +89,7 @@ public:
 		}
 	}
 	void Price(string msg) {
-		cout << "$" << msg << endl;
+		cout << "$" << msg << endl; //work on international currenices (depending on user's country)
 	}
 
 	void MenuSelect(string optionA, string optionB, string optionC, string optionD) {
@@ -91,20 +115,6 @@ void StartUp();
 void MainMenu();
 
 int main() {
-	Drinks Tea;
-	Tea.itemID = 1;
-	Tea.itemPrice = 5.99;
-	Tea.itemName = "English Tea";
-
-	Drinks Coffee;
-	Coffee.itemID = 2;
-	Coffee.itemPrice = 2.99;
-	Coffee.itemName = "Regular Coffee";
-
-	Drinks HotChoc;
-	HotChoc.itemID = 3;
-	HotChoc.itemPrice = 3.99;
-	HotChoc.itemName = "Hot Chocolate";
 
 	StartUp();
 	return 0;
@@ -128,12 +138,18 @@ void StartUp() {
 }
 
 void MainMenu() {
-	Broadcast MainMenu;
-	MainMenu.TimedMessage("Choose your option", 10, 0, true);
-	MainMenu.MenuSelect("Menu", "Start", "Exit", "d");
-	cin >> MainMenu.input;
-	switch (MainMenu.input) {
+	Broadcast mainMenu;
+	Drinks objA;
+
+	mainMenu.TimedMessage("Choose your option", 10, 0, true);
+	mainMenu.MenuSelect("Menu", "Start", "Exit", "d");
+
+	cin >> mainMenu.input;
+	switch (mainMenu.input) {
 	case 1:
+		mainMenu.TimedMessage("Drinks Menu", 10, 0, true);
+		objA.DrinksMenu();
+		mainMenu.Divider(10, 21);
 		cout << "Go to main menu";
 		break;
 	case 2:
@@ -146,7 +162,9 @@ void MainMenu() {
 		cout << "Runnnnnn";
 		break;
 	default:
-		cout << "error";
+		mainMenu.TimedMessage("Invaild Selection!", 20, 0, false);
+		mainMenu.TimedMessage("Please choose again:", 8, 5000, false);
+		MainMenu();
 		break;
 	}
 }
