@@ -34,6 +34,7 @@ private:
 	}
 
 public:
+	int input = 0;
 	void Message(string msg) {
 		cout << msg << endl;
 	}
@@ -65,6 +66,24 @@ public:
 	}
 	void Price(string msg) {
 		cout << "$" << msg << endl;
+	}
+
+	void MenuSelect(string optionA, string optionB, string optionC, string optionD) {
+		size_t sizeC = optionC.size();
+		size_t sizeD = optionD.size();
+
+		cout << "1 | ";
+		Message(optionA);
+		cout << "2 | ";
+		Message(optionB);
+		if (1 < sizeC) {
+			cout << "3 | ";
+			Message(optionC);
+		}
+		if (1 < sizeD) {
+			cout << "4 | ";
+			Message(optionD);
+		}
 	}
 };
 
@@ -110,5 +129,24 @@ void StartUp() {
 
 void MainMenu() {
 	Broadcast MainMenu;
-	MainMenu.TimedMessage("Choose your option.", 10, 0, true);
+	MainMenu.TimedMessage("Choose your option", 10, 0, true);
+	MainMenu.MenuSelect("Menu", "Start", "Exit", "d");
+	cin >> MainMenu.input;
+	switch (MainMenu.input) {
+	case 1:
+		cout << "Go to main menu";
+		break;
+	case 2:
+		cout << "Start program";
+		break;
+	case 3:
+		cout << "Exited program";
+		break;
+	case 4:
+		cout << "Runnnnnn";
+		break;
+	default:
+		cout << "error";
+		break;
+	}
 }
