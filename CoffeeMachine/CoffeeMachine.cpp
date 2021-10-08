@@ -1,12 +1,18 @@
 
 #include <iostream>
+#include <windows.h>
 #include <string>
 #include <vector>
-#include <windows.h>
 
 using namespace std;
 
 bool debugMode = true; //Debug
+const char* userCurrency = "$";
+
+class User {
+	double userPocket = 0;
+
+};
 
 class Drinks {
 public:
@@ -15,7 +21,7 @@ public:
 	string itemName;
 
 	friend ostream& operator<<(ostream& output, const Drinks& menu) {
-		return output << menu.itemName << endl << "$" << menu.itemPrice << endl; //use Price()?
+		return output << menu.itemName << endl << userCurrency << menu.itemPrice << endl; //use Price()?
 	}
 
 	void DrinksMenu() {
@@ -34,7 +40,10 @@ public:
 		HotChoc.itemPrice = 3.99;
 		HotChoc.itemName = "Hot Chocolate";
 
-		cout << endl << Tea << endl << Coffee << endl << HotChoc << endl; //loop automate
+		cout << endl //loop automate
+		<< Tea << endl 
+		<< Coffee << endl 
+		<< HotChoc << endl; 
 	}
 };
 
@@ -89,7 +98,7 @@ public:
 		}
 	}
 	void Price(string msg) {
-		cout << "$" << msg << endl; //work on international currenices (depending on user's country)
+		cout << userCurrency << msg << endl; //work on international currenices (depending on user's country)
 	}
 
 	void MenuSelect(string optionA, string optionB, string optionC, string optionD) {
@@ -150,16 +159,12 @@ void MainMenu() {
 		mainMenu.TimedMessage("Drinks Menu", 10, 0, true);
 		objA.DrinksMenu();
 		mainMenu.Divider(10, 21);
-		cout << "Go to main menu";
+		MainMenu();
 		break;
 	case 2:
 		cout << "Start program";
 		break;
 	case 3:
-		cout << "Exited program";
-		break;
-	case 4:
-		cout << "Runnnnnn";
 		break;
 	default:
 		mainMenu.TimedMessage("Invaild Selection!", 20, 0, false);
