@@ -8,6 +8,11 @@ using namespace std;
 
 bool debugMode = true; //Debug
 
+//user money
+const char* userCurrency = "$";
+double startingPocket = 5.99;
+double startingBank = 30;
+
 class Drinks {
 public:
 	int itemID = 0; //make const?
@@ -15,7 +20,7 @@ public:
 	string itemName;
 
 	friend ostream& operator<<(ostream& output, const Drinks& menu) {
-		return output << menu.itemName << endl << "$" << menu.itemPrice << endl; //use Price()?
+		return output << menu.itemName << endl << userCurrency << menu.itemPrice << endl; //use Price()?
 	}
 
 	void DrinksMenu() {
@@ -89,9 +94,8 @@ public:
 		}
 	}
 	void Price(string msg) {
-		cout << "$" << msg << endl; //work on international currenices (depending on user's country)
+		cout << userCurrency << msg << endl; //work on international currenices (depending on user's country)
 	}
-
 	void MenuSelect(string optionA, string optionB, string optionC, string optionD) {
 		size_t sizeC = optionC.size();
 		size_t sizeD = optionD.size();
@@ -111,8 +115,34 @@ public:
 	}
 };
 
+class User {
+public:
+	double userPocket = startingPocket;
+	double userBank = startingBank;
+
+	void CheckAmount(int bank) {
+		switch (bank) {
+		case 1:
+			cout << "User funds: " << userCurrency << userPocket << endl;
+			break;
+		case 2: 
+			cout << "User funds: " << userCurrency << userPocket << endl;
+		case 3:
+			cout << "Bank funds: " << userCurrency << userBank << endl;
+			break;
+		default:
+			break;
+		}
+	}
+	double ChangeAmount() { //todo
+		cout << "User funds: " << userCurrency << userBank << endl;
+		return userBank;
+	}
+};
+
 void StartUp();
 void MainMenu();
+int ExitProgram();
 
 int main() {
 
@@ -121,45 +151,58 @@ int main() {
 }
 
 void StartUp() {
-	Broadcast StartUp;
-	StartUp.Divider(10, 34);
-	StartUp.TimedMessage("Welcome to CoffeeVirtual", 10, 0, true);
-	StartUp.Divider(10, 34);
+	Broadcast startUp;
+	startUp.Divider(10, 34);
+	startUp.TimedMessage("Welcome to CoffeeVirtual", 10, 0, true);
+	startUp.Divider(10, 34);
 	if (debugMode == true) {
-		StartUp.TimedMessage("Debug Enabled", 7, 0, true);
+		startUp.TimedMessage("Debug Enabled", 7, 0, true);
 	}
 	cout << endl;
-	StartUp.TimedMessage("Starting up", 8, 1000, false);
-	StartUp.Loader(3, 3000);
-	StartUp.TimedMessage("Completed", 8, 1000, false);
+	startUp.TimedMessage("Starting up", 8, 1000, false);
+	startUp.Loader(3, 3000);
+	startUp.TimedMessage("Completed", 8, 1000, false);
 	cout << endl;
 
 	MainMenu();
 }
 
+int ExitProgram() {
+	Broadcast mainMenu;
+
+	mainMenu.TimedMessage("Thank you for using CoffeeVirtual", 10, 0, true);
+	return 0;
+}
+
 void MainMenu() {
 	Broadcast mainMenu;
-	Drinks objA;
+	User user;
+
+	Broadcast drinksMenu;
+	Drinks drinksA;
 
 	mainMenu.TimedMessage("Choose your option", 10, 0, true);
-	mainMenu.MenuSelect("Menu", "Start", "Exit", "d");
+	mainMenu.MenuSelect("Menu", "Start", "Funds", "Exit");
 
 	cin >> mainMenu.input;
 	switch (mainMenu.input) {
 	case 1:
-		mainMenu.TimedMessage("Drinks Menu", 10, 0, true);
-		objA.DrinksMenu();
-		mainMenu.Divider(10, 21);
-		cout << "Go to main menu";
+		drinksMenu.TimedMessage("Drinks Menu", 10, 0, true);
+		drinksA.DrinksMenu();
+		drinksMenu.Divider(10, 21);
+		user.CheckAmount(2);
+
+		mainMenu.TimedMessage("...", 8, 0, false);
+		mainMenu.Loader(1, 1000);
+		MainMenu();
 		break;
 	case 2:
 		cout << "Start program";
 		break;
 	case 3:
-		cout << "Exited program";
 		break;
 	case 4:
-		cout << "Runnnnnn";
+		ExitProgram();
 		break;
 	default:
 		mainMenu.TimedMessage("Invaild Selection!", 20, 0, false);
@@ -168,3 +211,4 @@ void MainMenu() {
 		break;
 	}
 }
+
