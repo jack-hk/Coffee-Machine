@@ -1,2 +1,3 @@
 ﻿  CoffeeMachine.cpp
-  CoffeeMachine.vcxproj -> C:\Users\jackh\Documents\coffee-machine\x64\Debug\CoffeeMachine.exe
+C:\Users\5hughj54\Documents\coffee-machine\CoffeeMachine\CoffeeMachine.cpp(224,7): warning C4101: 'user': unreferenced local variable
+  CoffeeMachine.vcxproj -> C:\Users\5hughj54\Documents\coffee-machine\x64\Debug\CoffeeMachine.exe

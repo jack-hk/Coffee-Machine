@@ -13,6 +13,30 @@ const char* userCurrency = "$";
 double startingPocket = 5.99;
 double startingBank = 30;
 
+double userPocket = startingPocket;
+double userBank = startingBank;
+
+const int DANGER = 20;
+const int GREEN = 10;
+const int GREY = 8;
+const int WHITE = 7;
+
+const int SHORT_TIMER = 1000;
+const int LONG_TIMER = 3000;
+
+void StartUp();
+void MainMenu();
+void ExitProgram();
+
+void ViewBank();
+void DrinksMenu();
+
+enum checkAmountOptions {
+	checkPocket,
+	checkPocketBank,
+	checkBank
+};
+
 class Drinks {
 public:
 	int itemID = 0; //make const?
@@ -43,7 +67,7 @@ public:
 	}
 };
 
-class Broadcast {
+class Broadcast { //rename
 private:
 	string divider = " ~~~~ ";
 	string eclipse = "...";
@@ -117,32 +141,25 @@ public:
 
 class User {
 public:
-	double userPocket = startingPocket;
-	double userBank = startingBank;
-
 	void CheckAmount(int bank) {
 		switch (bank) {
-		case 1:
+		case checkPocket:
 			cout << "User funds: " << userCurrency << userPocket << endl;
 			break;
-		case 2: 
+		case checkPocketBank:
 			cout << "User funds: " << userCurrency << userPocket << endl;
-		case 3:
+		case checkBank:
 			cout << "Bank funds: " << userCurrency << userBank << endl;
 			break;
 		default:
 			break;
 		}
 	}
-	double ChangeAmount() { //todo
-		cout << "User funds: " << userCurrency << userBank << endl;
-		return userBank;
+	double ChangeAmount(double input) { //todo
+		cin >> input;
+		return userBank - input, userPocket + input;
 	}
 };
-
-void StartUp();
-void MainMenu();
-int ExitProgram();
 
 int main() {
 
@@ -153,25 +170,53 @@ int main() {
 void StartUp() {
 	Broadcast startUp;
 	startUp.Divider(10, 34);
-	startUp.TimedMessage("Welcome to CoffeeVirtual", 10, 0, true);
+	startUp.TimedMessage("Welcome to CoffeeVirtual", GREEN, NULL, true);
 	startUp.Divider(10, 34);
 	if (debugMode == true) {
-		startUp.TimedMessage("Debug Enabled", 7, 0, true);
+		startUp.TimedMessage("Debug Enabled", WHITE, NULL, true);
 	}
-	cout << endl;
-	startUp.TimedMessage("Starting up", 8, 1000, false);
-	startUp.Loader(3, 3000);
-	startUp.TimedMessage("Completed", 8, 1000, false);
+	else {
+		cout << endl;
+		startUp.TimedMessage("Starting up", GREY, SHORT_TIMER, false);
+		startUp.Loader(3, LONG_TIMER);
+		startUp.TimedMessage("Completed", GREY, SHORT_TIMER, false);
+	}
 	cout << endl;
 
 	MainMenu();
 }
 
-int ExitProgram() {
+void ExitProgram() {
 	Broadcast mainMenu;
 
-	mainMenu.TimedMessage("Thank you for using CoffeeVirtual", 10, 0, true);
-	return 0;
+	mainMenu.TimedMessage("Thank you for using CoffeeVirtual", GREEN, NULL, true);
+}
+
+void ViewBank() {
+	Broadcast bankMenu;
+	User user;
+
+	bankMenu.TimedMessage("Bank", GREEN, NULL, true);
+	user.CheckAmount(checkPocketBank);
+	bankMenu.Divider(10, 14);
+	user.ChangeAmount(NULL);
+	user.CheckAmount(checkPocketBank);
+}
+
+void DrinksMenu() {
+	Broadcast drinksMenu;
+	Drinks drinksA;
+
+	Broadcast mainMenu;
+	User user;
+
+	drinksMenu.TimedMessage("Drinks Menu", GREEN, NULL, true);
+	drinksA.DrinksMenu();
+	drinksMenu.Divider(GREEN, 21);
+	user.CheckAmount(checkPocketBank);
+
+	mainMenu.TimedMessage("...", GREY, NULL, false);
+	mainMenu.Loader(1, SHORT_TIMER);
 }
 
 void MainMenu() {
@@ -181,32 +226,28 @@ void MainMenu() {
 	Broadcast drinksMenu;
 	Drinks drinksA;
 
-	mainMenu.TimedMessage("Choose your option", 10, 0, true);
+	mainMenu.TimedMessage("Choose your option", GREEN, NULL, true);
 	mainMenu.MenuSelect("Menu", "Start", "Funds", "Exit");
 
 	cin >> mainMenu.input;
 	switch (mainMenu.input) {
 	case 1:
-		drinksMenu.TimedMessage("Drinks Menu", 10, 0, true);
-		drinksA.DrinksMenu();
-		drinksMenu.Divider(10, 21);
-		user.CheckAmount(2);
-
-		mainMenu.TimedMessage("...", 8, 0, false);
-		mainMenu.Loader(1, 1000);
+		DrinksMenu();
 		MainMenu();
 		break;
 	case 2:
 		cout << "Start program";
 		break;
 	case 3:
+		ViewBank();
+		MainMenu();
 		break;
 	case 4:
 		ExitProgram();
 		break;
 	default:
-		mainMenu.TimedMessage("Invaild Selection!", 20, 0, false);
-		mainMenu.TimedMessage("Please choose again:", 8, 5000, false);
+		mainMenu.TimedMessage("Invaild Selection!", DANGER, NULL, false);
+		mainMenu.TimedMessage("Please choose again:", GREY, LONG_TIMER, false);
 		MainMenu();
 		break;
 	}
