@@ -1,1 +1,6 @@
+<<<<<<< HEAD
 ﻿  CoffeeMachine.vcxproj -> C:\Users\jackh\Documents\coffee-machine\x64\Debug\CoffeeMachine.exe
+=======
+﻿  CoffeeMachine.cpp
+  CoffeeMachine.vcxproj -> C:\Users\jackh\Documents\coffee-machine\x64\Debug\CoffeeMachine.exe
+>>>>>>> parent of 705609b (clean up)
